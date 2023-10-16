@@ -11,7 +11,7 @@ const gameOptions = {
 window.onload = function() {
     let gameConfig = {
         type: Phaser.AUTO,
-        backgroundColor: "#336633",
+        // backgroundColor: "grey",
         scale: {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.RESIZE,
@@ -28,7 +28,7 @@ window.onload = function() {
                 }
             }
         },
-        scene: [PlayGame, Menu]
+        scene: [Menu, PlayGame, Playgame2]
     }
 
     game = new Phaser.Game(gameConfig)

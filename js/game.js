@@ -3,7 +3,7 @@ class PlayGame extends Phaser.Scene {
     constructor() {
         super("PlayGame")
         this.score = 0
-        this.score2 = 0
+        this.heartCount = 0
         this.jumpCount = 0
         this.starsCreated = false
         this.groundGroup = null
@@ -83,7 +83,6 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.collider(heartsGroup, this.groundGroup)
         this.physics.add.overlap(this.player, heartsGroup, this.collecHeart, null, this)
 
-            // setting up the countter
         this.add.image(16, 50, "heart")
         this.scoreText2 = this.add.text(32, 38, "0", {fontSize: "30px", fill: "#ffffff"})
 
@@ -106,6 +105,8 @@ class PlayGame extends Phaser.Scene {
     }
 
 
+    // A round is complete when a player has picked up 10 stars
+    // then every round one bomb and possibly a heart will be spawn 
     collectStar(player, star) {
         star.disableBody(true, true)
         this.score += 1
@@ -165,8 +166,12 @@ class PlayGame extends Phaser.Scene {
     // function for the heart counter
     collecHeart(player, heart) {
         heart.disableBody(true, true)
-        this.score2 += 1
-        this.scoreText2.setText(this.score2)
+        this.heartCount += 1
+        this.scoreText2.setText(this.heartCount)
+
+        if (this.heartcount < 11){
+            this.add.image(200, 200, "heart")
+        }
     }
 
     // If the bomb is touched this is called
@@ -175,9 +180,14 @@ class PlayGame extends Phaser.Scene {
         this.player.setTint(0xff000)
         this.player.anims.play("turn")
         this.score = 0
-        this.score2 = 0
+        this.heartCount = 0
 
         this.scene.start("Menu")
+
+        // adding the soundeffect
+        let soundSample = this.sound.add("bombSound")
+        soundSample.play()
+        soundSample.setVolume(0.8)
     }
 
     createAnimations(){
@@ -224,7 +234,7 @@ class PlayGame extends Phaser.Scene {
             this.player.anims.play("turn", true)
         }
 
-        //Trying to create a double jump
+        //Creating a double jump
         if (this.player.body.touching.down) {
             this.jumpCount = 0
         }

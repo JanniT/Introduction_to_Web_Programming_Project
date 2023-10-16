@@ -1,33 +1,53 @@
 class Menu extends Phaser.Scene {
-    constructor() {
+    constructor(){
         super("Menu")
     }
 
     create() {
-        // Create a popup menu background
-        const background = this.add.graphics()
-        background.fillStyle(0x000000, 0.7)
-        background.fillRect(0, 0, game.config.width, game.config.height)
+        this.cameras.main.setBackgroundColor(0x808080);
+    
+        this.add.text(game.config.width / 2.5, game.config.width / 5, 'Main Menu', { fontSize: "36px", fill: '#ffffff'})
 
-        // Add a "Replay" button to restart the game
-        const replayButton = this.add.text(
+        // Map1 button to start the map
+        const map1Button = this.add.text(
             game.config.width / 2,
-            game.config.height / 2,
-            "Replay",
+            game.config.height / 2.6,
+            "Map1",
             {
                 fontSize: "36px",
                 fill: "#ffffff",
-                align: "center",
             }
         )
         
-        replayButton.setOrigin(0.5)
-        replayButton.setInteractive()
+        map1Button.setOrigin(0.5)
+        map1Button.setInteractive()
 
        // Handle button click
-       replayButton.on("pointerdown", () => {
+       map1Button.on("pointerdown", () => {
         // Restart the game scene
         this.scene.start("PlayGame")
+        })
+
+
+        // Map2 button to start the map
+        const map2Button = this.add.text(
+            game.config.width / 2,
+            game.config.height / 2,
+            "Map2",
+            {
+                fontSize: "36px",
+                fill: "#ffffff",
+                align: "center"
+            }
+        )
+        
+        map2Button.setOrigin(0.5)
+        map2Button.setInteractive()
+
+       // Handle button click
+       map2Button.on("pointerdown", () => {
+        // Restart the game scene
+        this.scene.start("Playgame2")
         })
     }
 }

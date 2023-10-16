@@ -2,23 +2,32 @@
 body {
     background-color: grey;
     margin: 0;
-    overflow: hidden; /* Prevent horizontal scrollbars */
+    overflow: hidden;
 }
 
 h1 {
     font-size: 36px;
     text-align: center;
     margin: 0;
+    color: aliceblue;
 }
 
+/* Max width and Centtering the container */
 #game-container {
-    max-width: 800px; /* Set the maximum width for the game container */
-    margin: 0 auto; /* Center the game container */
+    margin: 0 auto; 
+    border: 2px solid white;
+}
+
+@media (min-width: 800px) {
+    #game-container {
+        width: 100%;
+    }
 }
 
 /* Media query for screens with a maximum width of 800px */
+/* Make the game container fill the viewport width  */
 @media (max-width: 800px) {
     #game-container {
-        width: 100%; /* Make the game container fill the viewport width */
+        width: 99%;
     }
 }
