@@ -1,0 +1,24 @@
+/* Default styles */
+body {
+    background-color: grey;
+    margin: 0;
+    overflow: hidden; /* Prevent horizontal scrollbars */
+}
+
+h1 {
+    font-size: 36px;
+    text-align: center;
+    margin: 0;
+}
+
+#game-container {
+    max-width: 800px; /* Set the maximum width for the game container */
+    margin: 0 auto; /* Center the game container */
+}
+
+/* Media query for screens with a maximum width of 800px */
+@media (max-width: 800px) {
+    #game-container {
+        width: 100%; /* Make the game container fill the viewport width */
+    }
+}
