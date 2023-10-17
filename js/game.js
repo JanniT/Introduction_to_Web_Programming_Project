@@ -1,3 +1,5 @@
+// I used this in help to get the bullets correctly formed: https://blog.ourcade.co/posts/2020/fire-bullets-from-facing-direction-phaser-3/
+
 class PlayGame extends Phaser.Scene {
 
     constructor() {
@@ -5,6 +7,10 @@ class PlayGame extends Phaser.Scene {
         this.score = 0
         this.heartCount = 0
         this.jumpCount = 0
+        this.bulletCount = 0
+        this.bulletCountText = 3
+        this.lastBulletTime = 0
+        this.isCooldown = false
         this.starsCreated = false
         this.groundGroup = null
     }
@@ -14,9 +20,13 @@ class PlayGame extends Phaser.Scene {
         this.load.image("grass", "assets/platform2.png")
         this.load.image("bomb", "assets/bomb.png")
         this.load.image("sky", "assets/sky.png")
-        this.load.image("background", "assets/background.png")
+        // this.load.image("background", "assets/background.png")
+
+        this.cameras.main.setBackgroundColor(0x808080)
+
         this.load.image("star", "assets/star.png")
         this.load.image("heart", "assets/heart.png")
+        this.load.image("bullet", "assets/bullet.png")
 
         this.load.spritesheet("girl", "assets/girl.png", 
         {frameWidth: 64, frameHeight: 64})
@@ -24,12 +34,19 @@ class PlayGame extends Phaser.Scene {
         this.load.audio("spell", "assets/sounds/spell2.mp3")
         this.load.audio("bombSound", "assets/sounds/bomb.mp3")
         this.load.audio("roundWin", "assets/sounds/roundWin.mp3")
+        this.load.audio("shooting", "assets/sounds/shooting.mp3")
     }
 
     create() {
-        this.add.image(400,300, "background")
+        // this.add.image(400,300, "background")
 
-        this.groundGroup = this.physics.add.staticGroup();
+        const textStyle = {
+            fontSize: "36px",
+            fill: '#ffffff',
+            fontFamily: 'Times New Roman',
+        }
+
+        this.groundGroup = this.physics.add.staticGroup()
         this.groundGroup.create(470, 710, "grass").setScale(3).refreshBody()
 
         this.groundGroup.create(90, 250, "grass")
@@ -50,8 +67,15 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.collider(this.player, this.groundGroup)
 
         this.createAnimations()
-        
 
+        //shooting / bullet physics
+        this.bulletGroup = this.physics.add.group()
+        this.input.on('pointerdown', this.shoot, this)
+        this.physics.add.collider(this.bulletGroup, this.groundGroup)
+
+        this.add.image(16, 98, "bullet")
+        this.bulletText = this.add.text(32, 78, "3", textStyle)  
+        
         //Stars physics
         const starsGroup = this.physics.add.group({
             key: "star",
@@ -67,7 +91,7 @@ class PlayGame extends Phaser.Scene {
 
         
         this.add.image(16, 16, "star")
-        this.scoreText = this.add.text(32, 3, "0", {fontSize: "30px", fill: "#ffffff"})    
+        this.scoreText = this.add.text(32, 3, "0", textStyle )    
         
         
         //Heart physics
@@ -84,8 +108,55 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.overlap(this.player, heartsGroup, this.collecHeart, null, this)
 
         this.add.image(16, 50, "heart")
-        this.scoreText2 = this.add.text(32, 38, "0", {fontSize: "30px", fill: "#ffffff"})
+        this.scoreText2 = this.add.text(32, 38, "0", textStyle)
+    }
 
+    shoot(pointer) {
+        if (!this.isCooldown) {// the bullet limit is 3 and it has a cool down
+            if (this.bulletCount < 3) {
+
+                // adding the soundeffect
+                let soundSample = this.sound.add("shooting")
+                soundSample.play()
+                soundSample.setVolume(0.01)
+
+                // Calculating the space between player and mouse pointer
+                const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.x, pointer.y)
+
+                // The bullet is created on the players position
+                const bullet = this.bulletGroup.create(this.player.x, this.player.y, 'bullet')
+                bullet.setCollideWorldBounds(true)
+                bullet.setBounce(1)
+
+
+                // calculating velocity components based on the angle
+                const speed = 500
+                const velocityX = Math.cos(angle) * speed
+                const velocityY = Math.sin(angle) * speed
+
+                bullet.body.velocity.setTo(velocityX, velocityY)
+
+                //the bullets active time
+                this.time.delayedCall(3000, () => {
+                    bullet.destroy()
+                })
+
+                // updating the bullet count and the last bullet shot time
+                this.bulletCount++
+                this.bulletCountText--
+                this.lastBulletTime = this.time.now
+                this.bulletText.setText(this.bulletCountText) 
+
+            } else {
+                this.isCooldown = true
+                this.bulletCount = 0
+                this.bulletCountText = 3
+                this.time.delayedCall(3000, () => {
+                    this.bulletText.setText(this.bulletCountText)
+                    this.isCooldown = false 
+                    
+            })
+        }}
     }
 
     spawnBomb() {
@@ -100,7 +171,12 @@ class PlayGame extends Phaser.Scene {
             child.setVelocity(Phaser.Math.Between(-200, 200), 20)
         })
     
+        //making sure that the bomb will be destroyed when colliding with the bullet
         this.physics.add.collider(bombsGroup, this.groundGroup)
+        this.physics.add.overlap(this.bulletGroup, bombsGroup, this.bulletBombCollision, null, this)
+
+        this.physics.add.collider(bombsGroup, this.groundGroup)
+
         this.physics.add.overlap(this.player, bombsGroup, this.bombTouched, null, this)
     }
 
@@ -121,7 +197,7 @@ class PlayGame extends Phaser.Scene {
 
             // spawnig a heart
             if (Math.random() < 0.7) { // 70% probability
-                this.spawnHearts();
+                this.spawnHearts()
             }
 
             // spawning a bomb
@@ -131,7 +207,7 @@ class PlayGame extends Phaser.Scene {
         // adding the soundeffect
         let soundSample = this.sound.add("spell")
         soundSample.play()
-        soundSample.setVolume(0.1)
+        soundSample.setVolume(0.01)
     }
 
     // the hearts are created with 70% of chance.
@@ -179,10 +255,11 @@ class PlayGame extends Phaser.Scene {
         this.physics.pause()
         this.player.setTint(0xff000)
         this.player.anims.play("turn")
-        this.score = 0
         this.heartCount = 0
 
-        this.scene.start("Menu")
+        this.scene.start("ScoreBoard", { score: this.score })
+
+        this.score = 0
 
         // adding the soundeffect
         let soundSample = this.sound.add("bombSound")
@@ -219,9 +296,13 @@ class PlayGame extends Phaser.Scene {
             })
         }
 
+    bulletBombCollision(bullet, bomb) {
+    bullet.destroy()
+    bomb.destroy()
+    }
+
     update() {
         const cursors = this.input.keyboard.createCursorKeys()
-
 
         if(cursors.left.isDown) {
             this.player.body.velocity.x = -gameOptions.dudeSpeed
@@ -234,16 +315,14 @@ class PlayGame extends Phaser.Scene {
             this.player.anims.play("turn", true)
         }
 
-        //Creating a double jump
+        const jumpJustDown = Phaser.Input.Keyboard.JustDown(cursors.up)
+
+        if (jumpJustDown && (this.player.body.touching.down || this.jumpCount < 2)) {
+            this.player.setVelocity(-330)
+            this.jumpCount++
+        }
         if (this.player.body.touching.down) {
             this.jumpCount = 0
-        }
-
-        var canDoubleJump = this.jumpCount < 2
-        
-        if(cursors.up.isDown && (this.player.body.touching.down || canDoubleJump)) {
-            this.jumpCount++
-            this.player.body.velocity.y = -gameOptions.dudeGravity / 1
         }
     }
 }

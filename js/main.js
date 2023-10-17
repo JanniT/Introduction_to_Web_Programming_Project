@@ -28,8 +28,8 @@ window.onload = function() {
                 }
             }
         },
-        scene: [Menu, PlayGame, Playgame2]
-    }
+        scene: [Menu, PlayGame, Playgame2, ScoreBoard]
+    } 
 
     game = new Phaser.Game(gameConfig)
     window.focus()

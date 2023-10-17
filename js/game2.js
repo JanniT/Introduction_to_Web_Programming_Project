@@ -177,7 +177,7 @@ class Playgame2 extends Phaser.Scene {
         this.score = 0
         this.score2 = 0
 
-        this.scene.start("Menu")
+        this.scene.start("ScoreBoard", { score: this.score });
     }
 
     createAnimations(){
