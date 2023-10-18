@@ -21,34 +21,11 @@ class ScoreBoard extends Phaser.Scene {
 
         this.add.text(game.config.width / 2.6, game.config.height / 4, '  Scoreboard:', this.textStyle)
 
-        const nameInput = document.createElement("input")
-        nameInput.type = "text"
-        nameInput.placeholder = "Enter your name"
-        nameInput.style.position = "absolute"
-        nameInput.style.left = game.config.width / 2.3 + "px"
-        nameInput.style.top = game.config.height / 2.5 + "px"
-        document.body.appendChild(nameInput)
-
-
-        // Event listener for the Enter key press
-        nameInput.addEventListener("keydown", (event) => {
-            if (event.key === "Enter") {
-                event.preventDefault()
-                this.playerName = nameInput.value || "Player"
-                this.playerNameEntered = true
-                
-                this.scoreboardSave(this.playerName, this.finalScore)
-                document.body.removeChild(nameInput)
-
-                this.displayPlayerName()
-            }
-        })
-
         // Menu button
         const menuButton = this.add.text(
             game.config.width / 2,
             game.config.height / 5,
-            "Main Menu",
+            "Back",
             this.textStyle
         )
         
@@ -57,9 +34,47 @@ class ScoreBoard extends Phaser.Scene {
 
         // Handle button click also making sure that the input field is destroyed then
         menuButton.on("pointerdown", () => {
-            this.scene.start("Menu", { playerScores: this.playerScores })
+            this.scene.start("Menu")
             document.body.removeChild(nameInput)
         })
+
+        menuButton.on("pointerover", () => {
+            menuButton.setStyle( {fill: "#FFC0CB"})
+        })
+
+        menuButton.on("pointerout", () => {
+            menuButton.setStyle( {fill: "#ffffff"})
+        })
+
+
+        if(this.finalScore == 0) {
+            this.displayPlayerName()
+        } else{
+        
+            const nameInput = document.createElement("input")
+            nameInput.type = "text"
+            nameInput.placeholder = "Enter your name"
+            nameInput.style.position = "absolute"
+            nameInput.style.left = game.config.width / 2.3 + "px"
+            nameInput.style.top = game.config.height / 2.5 + "px"
+            document.body.appendChild(nameInput)
+
+
+            // Event listener for the Enter key press
+            nameInput.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault()
+                    this.playerName = nameInput.value || "Player"
+                    this.playerNameEntered = true
+
+                    // finalscore is multiplied by 10 to get the score look better 
+                    this.finalScore = this.finalScore*10
+                    this.scoreboardSave(this.playerName, this.finalScore)
+                    document.body.removeChild(nameInput)
+                    this.displayPlayerName()
+                }
+            })
+        }
     }
 
     // saving player and their score to a list
@@ -75,19 +90,20 @@ class ScoreBoard extends Phaser.Scene {
         }
     }
 
-
     // iterating through the list  to get the scoreboard visible 
     displayPlayerName() {
-        if (this.playerNameEntered && this.playerScores.length > 0) {
+        if (this.playerNameEntered || this.playerScores.length > 0) {
             // sorting playerScores by score in descending order
             this.playerScores.sort((a, b) => b.score - a.score)
 
-            let y = game.config.height / 2
+            let y = game.config.height / 3
             for (let i = 0; i < this.playerScores.length; i++) {
                 const player = this.playerScores[i]
                 this.add.text(game.config.width / 2.6, y, `${i + 1}. ${player.name}: ${player.score}`, this.textStyle)
                 y += 40 // putting the space between the different scores
             }
+        } else {
+            this.add.text(game.config.width / 3, game.config.height / 2, 'Scoreboard is empty :(( ', this.textStyle)
         }
     }
 }

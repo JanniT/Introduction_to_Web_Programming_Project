@@ -28,7 +28,7 @@ window.onload = function() {
                 }
             }
         },
-        scene: [Menu, PlayGame, Playgame2, ScoreBoard]
+        scene: [Menu, PlayGame, ScoreBoard, Settings]
     } 
 
     game = new Phaser.Game(gameConfig)
