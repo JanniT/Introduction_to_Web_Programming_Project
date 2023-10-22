@@ -1,5 +1,6 @@
-// Used this to check how the audios work: https://newdocs.phaser.io/docs/3.55.2/Phaser.Sound.Events.COMPLETE
-// Used this spritesheet https://fernandoruizrico.com/phaser-unit-3/
+// Used this in help to check how the audios work: https://newdocs.phaser.io/docs/3.55.2/Phaser.Sound.Events.COMPLETE
+// This on how to pass parameters: https://stackoverflow.com/questions/53356039/how-do-i-pass-data-from-scene-to-scene-in-phaser-3
+// This to get the tint right: https://newdocs.phaser.io/docs/3.55.2/focus/Phaser.GameObjects.Group-setTint
 
 let game 
 

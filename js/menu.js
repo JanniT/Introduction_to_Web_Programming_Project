@@ -15,6 +15,7 @@ class Menu extends Phaser.Scene {
             fontFamily: 'Times New Roman',
         }
     
+        this.add.text(game.config.width / 2.5, game.config.width / 9, 'BombRider', textStyle)
         this.add.text(game.config.width / 2.5, game.config.width / 5, 'Main Menu:', textStyle)
 
         // Map1 button to start the map

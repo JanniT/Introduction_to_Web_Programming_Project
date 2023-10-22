@@ -3,6 +3,7 @@ class ScoreBoard extends Phaser.Scene {
         super("ScoreBoard")
         this.playerName = ""
         this.playerScores = []
+        this.nameInput = null
 
         this.textStyle = {
             fontSize: "36px",
@@ -35,7 +36,10 @@ class ScoreBoard extends Phaser.Scene {
         // Handle button click also making sure that the input field is destroyed then
         menuButton.on("pointerdown", () => {
             this.scene.start("Menu")
-            document.body.removeChild(nameInput)
+            if (this.nameInput) {
+                document.body.removeChild(this.nameInput)
+                this.nameInput = null
+            }
         })
 
         menuButton.on("pointerover", () => {
@@ -46,7 +50,7 @@ class ScoreBoard extends Phaser.Scene {
             menuButton.setStyle( {fill: "#ffffff"})
         })
 
-
+        // if the finalscore is 0 the scoreboard is empty
         if(this.finalScore == 0) {
             this.displayPlayerName()
         } else{
@@ -55,10 +59,10 @@ class ScoreBoard extends Phaser.Scene {
             nameInput.type = "text"
             nameInput.placeholder = "Enter your name"
             nameInput.style.position = "absolute"
-            nameInput.style.left = game.config.width / 2.3 + "px"
-            nameInput.style.top = game.config.height / 2.5 + "px"
+            nameInput.style.left = "50%"
+            nameInput.style.top = "50%"
+            nameInput.style.transform = "translate(-50%, -50%)"
             document.body.appendChild(nameInput)
-
 
             // Event listener for the Enter key press
             nameInput.addEventListener("keydown", (event) => {
@@ -74,6 +78,7 @@ class ScoreBoard extends Phaser.Scene {
                     this.displayPlayerName()
                 }
             })
+            this.nameInput = nameInput
         }
     }
 
@@ -104,6 +109,7 @@ class ScoreBoard extends Phaser.Scene {
             }
         } else {
             this.add.text(game.config.width / 3, game.config.height / 2, 'Scoreboard is empty :(( ', this.textStyle)
+            this.add.text(game.config.width / 4, game.config.height / 1.5, 'Play the game to get on the scoreboard!!', this.textStyle)
         }
     }
 }

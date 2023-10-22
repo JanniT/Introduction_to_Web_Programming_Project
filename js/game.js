@@ -128,7 +128,7 @@ class PlayGame extends Phaser.Scene {
     }
 
     exButton(){
-        this.menuButton = this.add.image(880, 20, 'ex').setInteractive();
+        this.menuButton = this.add.image(880, 20, 'ex').setInteractive()
         this.menuButton.on('pointerdown', () => {
             this.initialize()
             this.scene.start('Menu')
@@ -166,7 +166,7 @@ class PlayGame extends Phaser.Scene {
         this.groundGroup.create(600+Math.random()*800, 380+Math.random()*400, "grass")
         this.groundGroup.create(90, 540, "ground")
         this.groundGroup.create(150, 350, "ground")
-        this.groundGroup.create(400+Math.random()*420, 460+Math.random()*490, "ground")
+        this.groundGroup.create(470+Math.random()*420, 460+Math.random()*490, "ground")
     }
 
     shoot(pointer) {
@@ -176,7 +176,7 @@ class PlayGame extends Phaser.Scene {
                 // adding the soundeffect
                 let soundSample = this.sound.add("shooting")
                 soundSample.play()
-                soundSample.setVolume(0.01)
+                soundSample.setVolume(0.02)
 
                 // Calculating the space between player and mouse pointer
                 const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.x, pointer.y)
@@ -251,7 +251,7 @@ class PlayGame extends Phaser.Scene {
             this.roundCount++
             let soundSample = this.sound.add("roundWin")
             soundSample.play()
-            soundSample.setVolume(0.1)
+            soundSample.setVolume(0.2)
             // creating the stars
             this.createStars()
 
@@ -267,7 +267,7 @@ class PlayGame extends Phaser.Scene {
         // adding the soundeffect
         let soundSample = this.sound.add("spell")
         soundSample.play()
-        soundSample.setVolume(0.01)
+        soundSample.setVolume(0.02)
     }
 
     // the hearts are created with 70% of chance.
