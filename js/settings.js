@@ -8,7 +8,6 @@ class Settings extends Phaser.Scene {
         this.load.image("heart", "assets/heart.png")
     }
 
-
     create() {
         this.cameras.main.setBackgroundColor(0x808080)
 
@@ -18,7 +17,6 @@ class Settings extends Phaser.Scene {
             fontFamily: 'Times New Roman',
         }
 
-
         this.add.text(game.config.width / 2.5, game.config.height / 5, 'How to play:', textStyle)
 
         const text1 = (`
@@ -26,7 +24,6 @@ class Settings extends Phaser.Scene {
         - Use the mouse to shoot the bombs \n
         - Collect the stars to get score \n
         - Collect the hearts to get hp (3 is full)`)
-
 
         this.add.text(game.config.width / 6, game.config.width / 5, text1, textStyle)
 

@@ -1,5 +1,3 @@
-// I used this to get the button hovering work: https://developer.mozilla.org/en-US/docs/Web/API/Element/pointerout_event
-
 class Menu extends Phaser.Scene {
     constructor(){
         super("Menu"),
@@ -28,7 +26,6 @@ class Menu extends Phaser.Scene {
         map1Button.setOrigin(0.5)
         map1Button.setInteractive()
 
-    
         // Handle button click
         map1Button.on("pointerdown", () => {
         // Restart the game scene
@@ -44,7 +41,7 @@ class Menu extends Phaser.Scene {
             map1Button.setStyle( {fill: "#ffffff"})
         })
 
-        // Map1 button to start the map
+        // Map2 button to start the map
         const map2Button = this.add.text(
             game.config.width / 2,
             game.config.height / 2.1,
@@ -54,14 +51,11 @@ class Menu extends Phaser.Scene {
         map2Button.setOrigin(0.5)
         map2Button.setInteractive()
 
-    
-        // Handle button click
         map2Button.on("pointerdown", () => {
         // Restart the game scene
         this.scene.start("PlayGame", {map: "map2"})
         })
-
-        // adding the color hovering
+        
         map2Button.on("pointerover", () => {
             map2Button.setStyle( {fill: "#FFC0CB"})
         })
@@ -81,7 +75,6 @@ class Menu extends Phaser.Scene {
         mapRandomButton.setOrigin(0.5)
         mapRandomButton.setInteractive()
 
-        // Handle button click
         mapRandomButton.on("pointerdown", () => {
 
         this.scene.start("PlayGame", {map: "randomMap"})
@@ -96,7 +89,7 @@ class Menu extends Phaser.Scene {
         })
 
 
-        // Scoreboard button to start the map
+        // Scoreboard button
         const scoreboardButton = this.add.text(
             game.config.width / 2,
             game.config.height / 1.4,
@@ -106,7 +99,6 @@ class Menu extends Phaser.Scene {
         scoreboardButton.setOrigin(0.5)
         scoreboardButton.setInteractive()
 
-        // Handle button click
         scoreboardButton.on("pointerdown", () => {
             this.scene.start("ScoreBoard", { score: this.score})
         })
@@ -119,7 +111,7 @@ class Menu extends Phaser.Scene {
             scoreboardButton.setStyle( {fill: "#ffffff"})
         })
         
-        // settings button to start the map
+        // help button
         const settingsButton = this.add.text(
             game.config.width / 2,
             game.config.height / 1.2,
@@ -129,7 +121,6 @@ class Menu extends Phaser.Scene {
         settingsButton.setOrigin(0.5)
         settingsButton.setInteractive()
 
-        // Handle button click
         settingsButton.on("pointerdown", () => {
         this.scene.start("Settings")
         })

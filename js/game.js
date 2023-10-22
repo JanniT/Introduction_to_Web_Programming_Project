@@ -1,7 +1,3 @@
-// I used this in help to get the bullets correctly formed: https://blog.ourcade.co/posts/2020/fire-bullets-from-facing-direction-phaser-3/
-// this to get the tint: https://newdocs.phaser.io/docs/3.55.2/focus/Phaser.GameObjects.Group-setTint
-
-
 class PlayGame extends Phaser.Scene {
 
     constructor() {
@@ -48,8 +44,6 @@ class PlayGame extends Phaser.Scene {
     }
 
     create(data) {
-        // this.add.image(400,300, "background")
-
         const textStyle = {
             fontSize: "36px",
             fill: '#ffffff',
@@ -106,7 +100,6 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.collider(starsGroup, this.groundGroup)
         this.physics.add.overlap(this.player, starsGroup, this.collectStar, null, this)
 
-        
         this.add.image(16, 20, "star")
         this.scoreText = this.add.text(32, 1, "0", textStyle )    
         
@@ -138,7 +131,6 @@ class PlayGame extends Phaser.Scene {
     createMap1() {
         this.groundGroup = this.physics.add.staticGroup()
         this.groundGroup.create(470, 710, "grass").setScale(3).refreshBody()
-
         this.groundGroup.create(90, 250, "grass")
         this.groundGroup.create(620, 400, "grass")
         this.groundGroup.create(700, 200, "ground")
@@ -149,7 +141,6 @@ class PlayGame extends Phaser.Scene {
     createMap2() {
         this.groundGroup = this.physics.add.staticGroup()
         this.groundGroup.create(470, 710, "grass").setScale(3).refreshBody()
-
         this.groundGroup.create(500, 200, "grass")
         this.groundGroup.create(800, 400, "grass")
         this.groundGroup.create(90, 540, "ground")
@@ -159,9 +150,7 @@ class PlayGame extends Phaser.Scene {
 
     createRandomMap(){
         this.groundGroup = this.physics.add.staticGroup()
-
         this.groundGroup.create(470, 710, "grass").setScale(3).refreshBody()
-
         this.groundGroup.create(200+Math.random()*500, 180+Math.random()*200, "grass")
         this.groundGroup.create(600+Math.random()*800, 380+Math.random()*400, "grass")
         this.groundGroup.create(90, 540, "ground")
@@ -170,7 +159,8 @@ class PlayGame extends Phaser.Scene {
     }
 
     shoot(pointer) {
-        if (!this.isCooldown) {// the bullet limit is 3 and it has a cool down
+        // the bullet limit is 3 and it has a cool down
+        if (!this.isCooldown) {
             if (this.bulletCount < 3) {
 
                 // adding the soundeffect
@@ -185,7 +175,6 @@ class PlayGame extends Phaser.Scene {
                 const bullet = this.bulletGroup.create(this.player.x, this.player.y, 'bullet')
                 bullet.setCollideWorldBounds(true)
                 bullet.setBounce(1)
-
 
                 // calculating velocity components based on the angle
                 const speed = 500
@@ -219,10 +208,11 @@ class PlayGame extends Phaser.Scene {
     }
 
     spawnBomb() {
+        // Number of bombs to be created
         this.bombCount = this.roundCount
         const bombsGroup = this.physics.add.group({
             key: "bomb",
-            repeat: this.bombCount, // Number of bombs to create
+            repeat: this.bombCount, 
             setXY: { x: Phaser.Math.FloatBetween(400, 800), y: 0, stepX: 95 },
         })
         bombsGroup.children.iterate(function (child) {
@@ -236,7 +226,6 @@ class PlayGame extends Phaser.Scene {
         this.physics.add.overlap(this.bulletGroup, bombsGroup, this.bulletBombCollision, null, this)
 
         this.physics.add.collider(bombsGroup, this.groundGroup)
-
         this.physics.add.overlap(this.player, bombsGroup, this.bombTouched, null, this)
     }
 
