@@ -1,5 +1,5 @@
 # Introduction_to_Web_Programming_Project
-A repository for a introduction to web programming course's project.
+A repository for a introduction to web programming course project.
 
 The project is a game made with Phaser. 
 
